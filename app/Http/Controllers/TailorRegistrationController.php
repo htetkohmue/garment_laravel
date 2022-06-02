@@ -18,8 +18,12 @@ class TailorRegistrationController extends Controller
     {
         //
         try {
-            //create SaveAfterOvertimeRequest Class to save data in db
-            $data= Tailor::all();
+            $data       = Tailor::all();
+            $tailorData = $data->map(function($data,$key) {
+                $data['key']=$key+1;
+                return $data;
+            });
+            $tailorData=json_decode($tailorData,true);
             return response()->json([
                 'status' =>  'OK',
                 'row_count'=>count($data),
