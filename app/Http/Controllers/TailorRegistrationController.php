@@ -125,11 +125,11 @@ class TailorRegistrationController extends Controller
 
             //create SaveAfterOvertimeRequest Class to save data in db
             $data= Tailor::where('id',$id)->update([
-                "tailorID"         => $request->tailor_id,
-                "nameMM"           => $request->name_mm,
-                "nameEN"           => $request->name_en,
-                "phoneNO"          => $request->phone_no,
-                "nrcNO"            => $request->nrc_no,
+                "tailorId"         => $request->tailor_id,
+                "nameMm"           => $request->name_mm,
+                "nameEn"           => $request->name_en,
+                "phoneNo"          => $request->phone_no,
+                "nrcNo"            => $request->nrc_no,
                 "address"           => $request->address,
                 "description"       => $request->description,
                 "created_emp"       => $request->login_id,
