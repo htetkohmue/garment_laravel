@@ -19,11 +19,11 @@ class SaveTailorData {
             //$hashedPassword     = hash('sha512', $this->request->password);
             //Insert into admins table
             Tailor::insert([
-                "tailorID"         => $this->request->tailor_id,
-                "nameMM"           => $this->request->name_mm,
-                "nameEN"           => $this->request->name_en,
-                "phoneNO"          => $this->request->phone_no,
-                "nrcNO"            => $this->request->nrc_no,
+                "tailorId"         => $this->request->tailor_id,
+                "nameMm"           => $this->request->name_mm,
+                "nameEn"           => $this->request->name_en,
+                "phoneNo"          => $this->request->phone_no,
+                "nrcNo"            => $this->request->nrc_no,
                 "address"           => $this->request->address,
                 "description"       => $this->request->description,
                 "created_emp"       => $this->request->login_id,
