@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\TailorRegistrationController;
 
 /*
@@ -29,3 +30,9 @@ Route::get('search-tailor',[TailorRegistrationController::class, 'index']);
 Route::post('delete-tailor',[TailorRegistrationController::class, 'destroy']);
 Route::get('edit-tailor/{id}',[TailorRegistrationController::class, 'show']);
 Route::put('update-tailor/{id}',[TailorRegistrationController::class, 'update']);
+
+Route::post('register-raws',[RawMaterialController::class, 'store']);
+Route::get('search-raws',[RawMaterialController::class, 'index']);
+Route::get('edit-raws/{id}',[RawMaterialController::class, 'show']);
+Route::put('update-raws/{id}',[RawMaterialController::class, 'update']);
+Route::post('delete-raws/{id}',[RawMaterialController::class, 'destroy']);
