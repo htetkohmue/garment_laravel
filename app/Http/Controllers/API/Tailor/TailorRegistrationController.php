@@ -1,40 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-use App\Repositories\DBTransaction\SaveTailorData;
-use Illuminate\Support\Facades\Validator;
+namespace App\Http\Controllers\API\Tailor;
 use App\Models\Tailor;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use App\DBTransactions\Tailor\SaveTailorData;
+use App\DBTransactions\Tailor\UpdateTailorData;
 
 class TailorRegistrationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-        try {
-            $data       = Tailor::all();
-            $tailorData = $data->map(function($data,$key) {
-                $data['key']=$key+1;
-                return $data;
-            });
-            $tailorData=json_decode($tailorData,true);
-            return response()->json([
-                'status' =>  'OK',
-                'row_count'=>count($data),
-                'data'   =>   $data,
-            ],200);
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
-
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -60,14 +35,25 @@ class TailorRegistrationController extends Controller
             ],200);
         }
         try {
-            //create SaveAfterOvertimeRequest Class to save data in db
-            $process = new SaveTailorData($request);
-            return response()->json([
-                'status'    =>  'OK',
-                'message'   =>  'Successfull Registration',
-            ],200);
+            //create SaveTailorData Class to save data in db
+            $save = new SaveTailorData($request);
+            $bool = $save->executeProcess();
+            if ($bool) {
+                return response()->json([
+                    'status'    =>  'OK',
+                    'message'   =>  trans('successMessage.SS001'),
+                ],200);
+            }else{
+                return response()->json([
+                    'status' =>  'NG',
+                    'message' =>  trans('errorMessage.ER005'),
+                ],200);
+            }
         } catch (\Throwable $th) {
-            //throw $th;
+            return response()->json([
+                'status' =>  'NG',
+                'message' =>  trans('errorMessage.ER005'),
+            ],200);
         }
 
     }
@@ -82,15 +68,22 @@ class TailorRegistrationController extends Controller
     {
         //
         try {
-
-            //create SaveAfterOvertimeRequest Class to save data in db
             $data= Tailor::where('id',$id)->first();
+            if (empty($data)) {
+                return response()->json([
+                    'status' =>  'NG',
+                    'message'   =>  trans('errorMessage.ER007'),
+                ],200);
+            }
             return response()->json([
                 'status' =>  'OK',
                 'data'   =>   $data,
             ],200);
         } catch (\Throwable $th) {
-            //throw $th;
+            return response()->json([
+                'status' =>  'NG',
+                'message' =>  trans('errorMessage.ER005'),
+            ],200);
         }
 
     }
@@ -122,43 +115,33 @@ class TailorRegistrationController extends Controller
             ],200);
         }
         try {
-
-            //create SaveAfterOvertimeRequest Class to save data in db
-            $data= Tailor::where('id',$id)->update([
-                "tailorId"         => $request->tailor_id,
-                "nameMm"           => $request->name_mm,
-                "nameEn"           => $request->name_en,
-                "phoneNo"          => $request->phone_no,
-                "nrcNo"            => $request->nrc_no,
-                "address"           => $request->address,
-                "description"       => $request->description,
-                "created_emp"       => $request->login_id,
-                "updated_emp"       => $request->login_id,
-             ]);
-            return response()->json([
-                'status' =>  'OK',
-                'message'   => 'Update Successfull',
-            ],200);
+            if (!Tailor::where('id',$id)->exists()) {
+                return response()->json([
+                    'status' =>  'NG',
+                    'message'   =>  trans('errorMessage.ER007'),
+                ],200);
+            }
+            //create UpdateTailorData Class to update data in db
+            $update = new UpdateTailorData($id,$request);
+            $bool = $update->executeProcess();
+            if ($bool) {
+                return response()->json([
+                    'status'    =>  'OK',
+                    'message'   =>  trans('successMessage.SS002'),
+                ],200);
+            }else{
+                return response()->json([
+                    'status' =>  'NG',
+                    'message' =>  trans('errorMessage.ER005'),
+                ],200);
+            }
         } catch (\Throwable $th) {
-            //throw $th;
+            return response()->json([
+                'status' =>  'NG',
+                'message' =>  trans('errorMessage.ER005'),
+            ],200);
         }
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request)
-    {
-        //
-        Tailor::whereIn('id',$request->tailor_id)->delete();
-        return response()->json([
-            'status' => 'OK',
-            'message'   => 'Delete Successfull',
-        ],200);
-
-    }
 }

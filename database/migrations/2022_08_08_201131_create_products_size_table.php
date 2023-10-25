@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AdminsTable extends Migration
+class CreateProductsSizeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class AdminsTable extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('admins', function (Blueprint $table) {
+        Schema::create('products_size', function (Blueprint $table) {
             $table->id();
-            $table->integer('admin_code');
-            $table->string('admin_name');
-            $table->string('password');
-            $table->softDeletes(); // deleted_at
+            $table->integer('product_id')->comment('foreign Key from products');
+            $table->integer('size_id')->comment('foreign Key from sizes');
+            $table->softDeletes();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });
@@ -32,6 +30,6 @@ class AdminsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('products_size');
     }
 }

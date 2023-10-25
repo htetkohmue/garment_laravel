@@ -15,13 +15,13 @@ class CreateTailorsTable extends Migration
     {
         Schema::create('tailors', function (Blueprint $table) {
             $table->id();
-            $table->integer('tailorId');
-            $table->string('nameMm');
-            $table->string('nameEn');
-            $table->integer('phoneNo');
-            $table->string('nrcNo');
+            $table->integer('tailor_id');
+            $table->string('name_mm');
+            $table->string('name_en');
+            $table->integer('phone_no');
+            $table->string('nrc_no');
             $table->string('address');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->softDeletes();
             $table->integer('created_emp');
             $table->integer('updated_emp');
